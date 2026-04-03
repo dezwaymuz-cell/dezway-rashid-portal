@@ -1,0 +1,41 @@
+{
+  "clientName": "Kitchens",
+  "pendingInvoices": [
+    {
+      "title": "CUSTOM BILLING SYSTEM DEVELOPMENT",
+      "date": "31 Mar 2026",
+      "amount": "₹4,500",
+      "dueDate": "05 Apr 2026",
+      "status": "Pending",
+      "invoiceUrl": "pdf/invoices/DEZ-RR-002.pdf"
+    },  
+    {
+      "title": "PRODUCT STICKER DESIGN & DELIVERY",
+      "date": "02 April  2026",
+      "amount": "₹1,250",
+      "dueDate": "27 Mar 2026",
+      "status": "Pending",
+      "invoiceUrl": "invoice-sticker-march-2026.pdf"
+    }
+  ],
+  "paidInvoices": [
+    {
+      "title": "Brand Starter Design - Logo & Menu Poster",
+      "amount": "₹1,300",
+      "paidDate": "25 Mar 2026",
+      "invoiceUrl": "pdf/invoices/DEZ-RR-001.pdf"
+    }
+  ],
+  "receipts": [
+    {
+      "title": "Receipt - Brand Starter Design - Logo & Menu Poster",
+      "paidDate": "25 Mar 2026",
+      "receiptUrl": "pdf/receipts/DEZ-RR-RC-001.pdf"
+    }
+  ],
+  "paymentDetails": {
+    "upiId": "mhdmuz313@pytes",
+    "phoneNumber": "8111858488",
+    "paymentMethod": "UPI / Bank Transfer"
+  }
+}

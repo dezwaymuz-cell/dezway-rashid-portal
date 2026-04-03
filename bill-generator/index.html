@@ -1,0 +1,1131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kitchen’s Pure Spicy - Bill Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap");
+
+      :root {
+        --brand-primary: #9f1239;
+        --brand-primary-dark: #7f0f2d;
+        --brand-secondary: #c2410f;
+        --brand-soft: #fff7ed;
+        --paper-width: 794px;
+      }
+
+      * {
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        background:
+          radial-gradient(
+            circle at top left,
+            rgba(251, 191, 36, 0.18),
+            transparent 35%
+          ),
+          radial-gradient(
+            circle at bottom right,
+            rgba(159, 18, 57, 0.09),
+            transparent 28%
+          ),
+          linear-gradient(135deg, #fffaf5 0%, #fff7ed 42%, #ffffff 100%);
+        color: #1f2937;
+        min-height: 100vh;
+      }
+
+      .invoice-title {
+        font-family: "Playfair Display", serif;
+      }
+
+      .glass-panel {
+        background: rgba(255, 255, 255, 0.86);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+      }
+
+      .panel-shadow {
+        box-shadow:
+          0 24px 60px rgba(159, 18, 57, 0.08),
+          0 10px 24px rgba(15, 23, 42, 0.06);
+      }
+
+      .invoice-shadow {
+        box-shadow:
+          0 30px 80px rgba(159, 18, 57, 0.11),
+          0 14px 36px rgba(15, 23, 42, 0.08);
+      }
+
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      th,
+      td {
+        border: 1px solid #e5e7eb;
+      }
+
+      .field,
+      .select-field,
+      .textarea-field {
+        width: 100%;
+        border: 1px solid #fed7aa;
+        background: #fffaf5;
+        border-radius: 1.25rem;
+        transition: all 0.2s ease;
+        outline: none;
+      }
+
+      .field:focus,
+      .select-field:focus,
+      .textarea-field:focus {
+        border-color: var(--brand-primary);
+        background: #ffffff;
+        box-shadow: 0 0 0 4px rgba(159, 18, 57, 0.13);
+        transform: translateY(-1px);
+      }
+
+      .catalog-card {
+        transition:
+          transform 0.2s ease,
+          border-color 0.2s ease,
+          box-shadow 0.2s ease,
+          background 0.2s ease;
+      }
+
+      .catalog-card:hover {
+        transform: translateY(-2px);
+        border-color: rgba(159, 18, 57, 0.45);
+        box-shadow: 0 12px 22px rgba(159, 18, 57, 0.08);
+        background: #fffaf5;
+      }
+
+      .app-layout {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        align-items: start;
+      }
+
+      .left-panel,
+      .right-panel {
+        min-width: 0;
+      }
+
+      .preview-wrap {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+      }
+
+      .invoice-container {
+        width: 100%;
+        max-width: var(--paper-width);
+        background: white;
+        border: 1px solid #fed7aa;
+        border-radius: 2rem;
+        overflow: hidden;
+      }
+
+      .sticky-preview {
+        position: static;
+      }
+
+      .desktop-status {
+        display: none;
+      }
+
+      @media (min-width: 1100px) {
+        .app-layout {
+          grid-template-columns: minmax(620px, 1.2fr) minmax(
+              560px,
+              var(--paper-width)
+            );
+          gap: 2rem;
+        }
+
+        .sticky-preview {
+          position: sticky;
+          top: 108px;
+        }
+
+        .desktop-status {
+          display: flex;
+        }
+      }
+
+      @media (min-width: 1440px) {
+        .app-shell {
+          max-width: 1580px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .invoice-container {
+          border-radius: 1.5rem;
+        }
+      }
+
+      @media print {
+        @page {
+          size: A4 portrait;
+          margin: 0;
+        }
+
+        html,
+        body {
+          margin: 0 !important;
+          padding: 0 !important;
+          background: white !important;
+        }
+
+        body * {
+          visibility: hidden;
+        }
+
+        #invoice-container,
+        #invoice-container * {
+          visibility: visible;
+        }
+
+        #invoice-container {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          max-width: 100% !important;
+          margin: 0 !important;
+          border-radius: 0 !important;
+          box-shadow: none !important;
+          border: none !important;
+        }
+
+        .no-print,
+        .actions-column {
+          display: none !important;
+        }
+
+        .logo-img {
+          height: 105px !important;
+        }
+
+        .print-tight {
+          padding-left: 28px !important;
+          padding-right: 28px !important;
+        }
+
+        table {
+          font-size: 11pt !important;
+        }
+
+        .total-box {
+          border: 3px solid var(--brand-primary) !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      class="no-print sticky top-0 z-50 border-b border-orange-100 bg-white/90 backdrop-blur-xl"
+    >
+      <div class="app-shell mx-auto max-w-7xl px-4 sm:px-6 py-4">
+        <div
+          class="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between"
+        >
+          <div class="flex items-start gap-3 sm:items-center">
+            <div
+              class="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#9f1239] text-white text-3xl shadow-inner"
+            >
+              🌶️
+            </div>
+            <div>
+              <h1
+                class="text-2xl sm:text-3xl font-extrabold tracking-[-0.03em] text-[#9f1239]"
+              >
+                Kitchen’s Pure Spicy
+              </h1>
+              <p class="text-xs sm:text-sm font-medium text-amber-700">
+                Premium Wholesale • Smart Bill Generator
+              </p>
+            </div>
+          </div>
+
+          <div class="flex w-full flex-col gap-3 sm:flex-row xl:w-auto">
+            <button
+              onclick="newBill()"
+              class="flex items-center justify-center gap-2 rounded-3xl border-2 border-[#9f1239] bg-white px-5 py-3 font-semibold text-[#9f1239] transition active:scale-[0.98]"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+              New Bill
+            </button>
+            <button
+              onclick="printBill()"
+              class="flex items-center justify-center gap-2 rounded-3xl bg-[#9f1239] px-6 py-3 font-semibold text-white shadow-lg shadow-[#9f1239]/25 transition hover:bg-[#7f0f2d] active:scale-[0.98]"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H3a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2z"
+                />
+              </svg>
+              Print Bill
+            </button>
+          </div>
+
+          <div
+            class="desktop-status items-center gap-2 rounded-full bg-emerald-50 px-4 py-2 text-xs font-semibold text-emerald-700"
+          >
+            <span
+              class="h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse"
+            ></span>
+            MOBILE + PC OPTIMIZED
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="app-shell mx-auto max-w-7xl px-4 sm:px-6 pt-6 pb-12">
+      <div class="app-layout">
+        <section
+          class="left-panel glass-panel panel-shadow rounded-[2rem] border border-orange-100 p-5 sm:p-7 xl:p-8"
+        >
+          <div
+            class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
+          >
+            <div>
+              <h2 class="text-2xl sm:text-3xl font-extrabold text-[#9f1239]">
+                Bill Generator
+              </h2>
+              <p class="mt-1 text-sm text-slate-500">
+                Mobile-friendly controls with a real desktop-side preview.
+              </p>
+            </div>
+            <div
+              class="inline-flex w-fit items-center gap-2 rounded-full bg-emerald-100 px-4 py-2 text-xs font-semibold text-emerald-700"
+            >
+              <span
+                class="h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse"
+              ></span>
+              Live Preview Ready
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 gap-6 2xl:grid-cols-12">
+            <div class="space-y-6 2xl:col-span-5">
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div>
+                  <label
+                    class="text-xs font-semibold tracking-[0.18em] text-slate-500"
+                    >INVOICE NO</label
+                  >
+                  <input
+                    id="invoice-num-input"
+                    type="text"
+                    class="field mt-2 px-5 py-3.5 text-lg font-bold font-mono"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="text-xs font-semibold tracking-[0.18em] text-slate-500"
+                    >DATE</label
+                  >
+                  <input
+                    id="date-input"
+                    type="date"
+                    class="field mt-2 px-5 py-3.5 text-lg"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label
+                  class="text-xs font-semibold tracking-[0.18em] text-slate-500"
+                  >DELIVERY TO</label
+                >
+                <input
+                  id="customer-name-input"
+                  type="text"
+                  value=""
+                  class="field mt-2 px-5 py-3.5 text-xl sm:text-2xl font-semibold"
+                />
+                <textarea
+                  id="customer-address-input"
+                  rows="3"
+                  class="textarea-field mt-3 resize-none px-5 py-3 text-base"
+                  placeholder="Full address"
+                >
+</textarea
+                >
+              </div>
+
+              <div
+                class="rounded-[1.75rem] border border-dashed border-orange-200 bg-orange-50/70 p-4"
+              >
+                <p
+                  class="text-xs font-semibold tracking-[0.18em] text-slate-500"
+                >
+                  DESKTOP IMPROVEMENT
+                </p>
+                <p class="mt-2 text-sm leading-6 text-slate-600">
+                  On PC, this form stays on the left and the invoice preview
+                  stays fixed on the right, so editing feels more professional
+                  and easier.
+                </p>
+              </div>
+            </div>
+
+            <div
+              class="rounded-[1.75rem] border border-orange-200 bg-gradient-to-br from-orange-50 via-white to-rose-50 p-5 sm:p-6 2xl:col-span-7"
+            >
+              <div class="mb-4 flex items-center justify-between gap-3">
+                <div>
+                  <h3 class="text-lg sm:text-xl font-bold text-[#9f1239]">
+                    Add Custom Item
+                  </h3>
+                  <p class="text-sm text-slate-500">
+                    Supports KG and G billing.
+                  </p>
+                </div>
+                <div
+                  class="rounded-full bg-white px-4 py-1.5 text-xs font-semibold text-amber-700 shadow-sm"
+                >
+                  Quick entry
+                </div>
+              </div>
+
+              <div class="grid grid-cols-12 gap-3 sm:gap-4">
+                <div class="col-span-12 md:col-span-6">
+                  <label class="text-xs font-semibold text-slate-500"
+                    >ITEM NAME</label
+                  >
+                  <input
+                    id="item-name"
+                    type="text"
+                    class="field mt-2 px-5 py-4 text-base"
+                    placeholder="മല്ലി പൊടി"
+                  />
+                </div>
+                <div class="col-span-6 md:col-span-2">
+                  <label class="text-xs font-semibold text-slate-500"
+                    >QTY</label
+                  >
+                  <input
+                    id="item-qty"
+                    type="number"
+                    step="0.01"
+                    value="1"
+                    class="field mt-2 px-4 py-4 text-center text-lg font-semibold font-mono"
+                  />
+                </div>
+                <div class="col-span-6 md:col-span-2">
+                  <label class="text-xs font-semibold text-slate-500"
+                    >UNIT</label
+                  >
+                  <select
+                    id="item-unit"
+                    class="select-field mt-2 px-4 py-4 text-base font-semibold"
+                  >
+                    <option value="kg">KG</option>
+                    <option value="g">G</option>
+                  </select>
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                  <label class="text-xs font-semibold text-slate-500"
+                    >RATE</label
+                  >
+                  <input
+                    id="item-rate"
+                    type="number"
+                    step="0.01"
+                    value="180"
+                    class="field mt-2 px-4 py-4 text-center text-lg font-semibold font-mono"
+                  />
+                </div>
+                <div class="col-span-12">
+                  <button
+                    onclick="addCustomItem()"
+                    class="flex w-full items-center justify-center gap-3 rounded-3xl bg-[#9f1239] px-6 py-4 text-base sm:text-lg font-extrabold text-white shadow-lg shadow-[#9f1239]/20 transition hover:bg-[#7f0f2d] active:scale-[0.99]"
+                  >
+                    Add To Bill
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-8">
+            <div
+              class="mb-4 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between"
+            >
+              <div>
+                <h3 class="text-lg sm:text-xl font-bold text-[#9f1239]">
+                  Quick Catalog
+                </h3>
+                <p class="text-sm text-slate-500">
+                  Tap on mobile or click on desktop to add items fast.
+                </p>
+              </div>
+              <div class="text-xs font-semibold text-amber-700">
+                Choose item → enter quantity → add
+              </div>
+            </div>
+            <div
+              id="catalog-grid"
+              class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5"
+            ></div>
+          </div>
+        </section>
+
+        <aside class="right-panel">
+          <div class="sticky-preview">
+            <div class="preview-wrap">
+              <div
+                id="invoice-container"
+                class="invoice-container invoice-shadow"
+              >
+                <div
+                  class="bg-gradient-to-r from-[#9f1239] via-[#b11d47] to-[#c2410f] px-6 sm:px-8 lg:px-10 py-8 text-white print-tight"
+                >
+                  <div class="flex flex-col gap-6 sm:flex-row sm:items-start">
+                    <div class="flex-shrink-0">
+                      <img
+                        src="/dezway-rashid/logo.png"
+                        alt="Kitchen’s Pure Spicy Logo"
+                        class="logo-img h-20 sm:h-24 w-auto rounded-2xl border-2 border-white/30 bg-white p-1.5 shadow-xl"
+                      />
+                    </div>
+                    <div class="flex-1">
+                      <div
+                        class="flex flex-col gap-6 md:flex-row md:items-start md:justify-between"
+                      >
+                        <div>
+                          <h1
+                            class="invoice-title text-4xl sm:text-5xl font-extrabold leading-none tracking-[-0.05em]"
+                          >
+                            Kitchen’s
+                          </h1>
+                          <h2
+                            class="invoice-title mt-1 text-4xl sm:text-5xl font-extrabold leading-none tracking-[-0.05em] text-amber-200"
+                          >
+                            Pure Spicy
+                          </h2>
+                          <p
+                            class="mt-3 text-sm sm:text-base font-medium text-orange-100"
+                          >
+                            Premium Spice Merchants • Kerala
+                          </p>
+                        </div>
+                        <div class="text-left md:text-right">
+                          <div
+                            class="mb-3 inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-1.5 text-xs font-semibold tracking-[0.18em] text-white/95 backdrop-blur-md"
+                          >
+                            <span
+                              class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"
+                            ></span>
+                            INVOICE
+                          </div>
+                          <div class="space-y-2 text-sm sm:text-base">
+                            <div class="flex flex-col md:items-end">
+                              <span
+                                class="text-[11px] font-semibold uppercase tracking-[0.18em] text-orange-100"
+                                >Invoice No</span
+                              >
+                              <span
+                                id="invoice-number"
+                                class="font-mono text-xl sm:text-2xl font-extrabold"
+                                >KPS-300326-001</span
+                              >
+                            </div>
+                            <div class="flex flex-col md:items-end">
+                              <span
+                                class="text-[11px] font-semibold uppercase tracking-[0.18em] text-orange-100"
+                                >Date</span
+                              >
+                              <span id="invoice-date" class="font-semibold"
+                                >30 March 2026</span
+                              >
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  class="border-b px-6 sm:px-8 lg:px-10 pt-7 pb-6 print-tight"
+                >
+                  <div
+                    class="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between"
+                  >
+                    <div class="min-w-0 flex-1">
+                      <p
+                        class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500"
+                      >
+                        Delivery To
+                      </p>
+                      <p
+                        id="delivery-to"
+                        class="mt-2 break-words text-2xl sm:text-3xl font-bold text-slate-900"
+                      >
+                        HIKAMIYYA MANJERI
+                      </p>
+                      <p
+                        id="delivery-address"
+                        class="mt-2 text-sm leading-6 text-slate-500"
+                      >
+                        Manjeri, Malappuram, Kerala
+                      </p>
+                    </div>
+                    <div
+                      class="sm:max-w-[220px] sm:text-right text-emerald-700"
+                    >
+                      <div
+                        class="text-xs font-semibold uppercase tracking-[0.18em]"
+                      >
+                        Wholesale Spice Supply
+                      </div>
+                      <p class="mt-2 text-sm sm:text-base font-semibold">
+                        Fresh • Pure • Guaranteed
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="px-4 sm:px-6 lg:px-8 pt-6 print-tight">
+                  <div
+                    class="overflow-x-auto rounded-[1.5rem] border border-slate-200"
+                  >
+                    <table class="min-w-full text-sm">
+                      <thead>
+                        <tr class="bg-[#9f1239] text-white">
+                          <th class="px-4 sm:px-5 py-4 text-left font-semibold">
+                            ITEM DESCRIPTION
+                          </th>
+                          <th
+                            class="px-4 sm:px-5 py-4 text-center font-semibold whitespace-nowrap"
+                          >
+                            QUANTITY
+                          </th>
+                          <th
+                            class="px-4 sm:px-5 py-4 text-right font-semibold whitespace-nowrap"
+                          >
+                            RATE (₹/kg)
+                          </th>
+                          <th
+                            class="px-4 sm:px-5 py-4 text-right font-semibold whitespace-nowrap"
+                          >
+                            AMOUNT (₹)
+                          </th>
+                          <th
+                            class="actions-column no-print px-4 sm:px-5 py-4 text-center font-semibold"
+                          >
+                            ✕
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody id="items-body" class="bg-white"></tbody>
+                    </table>
+                  </div>
+
+                  <div id="empty-state" class="hidden py-12 text-center">
+                    <div
+                      class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-orange-100 text-4xl"
+                    >
+                      🌶️
+                    </div>
+                    <p class="text-base font-bold text-amber-700">
+                      Bill is empty
+                    </p>
+                    <p class="mt-1 text-sm text-slate-500">
+                      Add items from catalog or the custom form.
+                    </p>
+                  </div>
+                </div>
+
+                <div
+                  class="px-6 sm:px-8 lg:px-10 py-8 flex justify-end print-tight"
+                >
+                  <div class="w-full sm:w-[340px]">
+                    <div
+                      class="flex items-center justify-between border-b py-3 text-lg"
+                    >
+                      <span class="font-semibold text-slate-700">Subtotal</span>
+                      <span
+                        id="subtotal"
+                        class="font-mono text-xl font-bold text-slate-900"
+                        >₹0</span
+                      >
+                    </div>
+                    <div
+                      class="total-box mt-5 rounded-[1.75rem] border-4 border-[#9f1239] bg-gradient-to-r from-orange-50 to-white px-6 py-6"
+                    >
+                      <div class="flex items-end justify-between gap-4">
+                        <div>
+                          <p
+                            class="text-xs font-semibold uppercase tracking-[0.18em] text-[#9f1239]/70"
+                          >
+                            Grand Total
+                          </p>
+                          <p
+                            class="mt-2 text-3xl font-extrabold text-[#9f1239]"
+                          >
+                            TOTAL
+                          </p>
+                        </div>
+                        <div class="text-right">
+                          <span
+                            id="total"
+                            class="block text-4xl sm:text-5xl font-extrabold font-mono text-[#9f1239]"
+                            >₹0</span
+                          >
+                          <p
+                            class="text-[11px] font-semibold tracking-[0.18em] text-[#9f1239]/65"
+                          >
+                            INR ONLY
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  class="grid grid-cols-1 gap-6 px-6 sm:px-8 lg:grid-cols-2 lg:px-10 pb-10 print-tight"
+                >
+                  <div
+                    class="rounded-[1.5rem] border border-orange-200 bg-orange-50 px-6 py-5 text-center"
+                  >
+                    <p class="font-bold text-[#9f1239]">
+                      Thank you for your business!
+                    </p>
+                    <p class="mt-1 text-sm text-amber-700">
+                      Pure ingredients. Authentic taste.
+                    </p>
+                  </div>
+                  <div>
+                    <div
+                      class="flex h-24 items-end justify-center rounded-[1.25rem] border border-dashed border-slate-300 bg-white"
+                    >
+                      <p class="pb-2 text-xs text-slate-400">
+                        Signature &amp; Stamp
+                      </p>
+                    </div>
+                    <p
+                      class="mt-3 text-center text-[10px] font-medium tracking-[0.16em] text-slate-400"
+                    >
+                      COMPUTER GENERATED • NO SIGNATURE REQUIRED
+                    </p>
+                  </div>
+                </div>
+
+                <div
+                  class="bg-[#9f1239] px-4 py-3 text-center text-[10px] font-bold tracking-[0.22em] text-white"
+                >
+                  PREMIUM SPICE • GUARANTEED PURITY • GST • FSSAI
+                </div>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <div
+      id="qty-modal"
+      class="hidden fixed inset-0 z-[9999] bg-black/70 px-4 flex items-center justify-center"
+    >
+      <div
+        class="w-full max-w-md overflow-hidden rounded-[2rem] bg-white shadow-2xl"
+      >
+        <div class="px-6 pt-6 pb-4">
+          <div class="flex items-start justify-between gap-4">
+            <div class="min-w-0 flex-1">
+              <h3
+                id="modal-item-name"
+                class="break-words text-2xl sm:text-3xl font-extrabold text-slate-900"
+              ></h3>
+              <p
+                id="modal-item-info"
+                class="mt-1 font-semibold text-emerald-600"
+              ></p>
+            </div>
+            <button
+              onclick="closeModal()"
+              class="text-4xl leading-none text-slate-300 transition hover:text-slate-500"
+            >
+              ×
+            </button>
+          </div>
+
+          <div class="mt-8">
+            <label
+              class="mb-2 block text-xs font-semibold tracking-[0.18em] text-slate-500"
+              >ENTER QUANTITY</label
+            >
+            <div class="flex items-center rounded-[1.5rem] bg-orange-50 p-2">
+              <input
+                id="modal-qty"
+                type="number"
+                step="0.01"
+                value="1"
+                class="field border-0 bg-white px-4 py-5 text-center text-4xl font-bold font-mono shadow-none focus:translate-y-0 focus:shadow-none"
+              />
+              <div
+                id="modal-unit-display"
+                class="px-5 text-3xl font-extrabold text-[#9f1239]"
+              ></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 border-t text-lg font-semibold">
+          <button
+            onclick="closeModal()"
+            class="py-5 text-slate-500 transition hover:bg-slate-50"
+          >
+            Cancel
+          </button>
+          <button
+            onclick="confirmAddFromCatalog()"
+            class="bg-[#9f1239] py-5 text-white transition hover:bg-[#7f0f2d]"
+          >
+            Add To Bill
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let items = [];
+      let currentCatalogItem = null;
+
+      const catalog = [
+        { name: "മുളക് പൊടി", rate: 210, unit: "kg" },
+        { name: "മഞ്ഞൾ പൊടി", rate: 220, unit: "kg" },
+        { name: "മല്ലി പൊടി", rate: 180, unit: "kg" },
+        { name: "സാമ്പാർ പൊടി", rate: 280, unit: "kg" },
+        { name: "മീറ്റ് മസാല", rate: 290, unit: "kg" },
+        { name: "ചിക്കൻ മസാല", rate: 290, unit: "kg" },
+        { name: "കാശ്മീരി", rate: 360, unit: "kg" },
+        { name: "കടുക്", rate: 100, unit: "kg" },
+        { name: "ഉലുവ", rate: 100, unit: "kg" },
+        { name: "പുട്ട് പൊടി", rate: 54, unit: "kg" },
+        { name: "നല്ല ജീരകം", rate: 180, unit: "kg" },
+        { name: "ജീരകം വലുത്", rate: 100, unit: "kg" },
+        { name: "ഫിഷ് മസാല", rate: 290, unit: "kg" },
+        { name: "ഗരം മസാല", rate: 290, unit: "kg" },
+        { name: "ജീരകം ചെറുത്", rate: 285, unit: "kg" }
+      ];
+
+      function calculateAmount(qty, unit, rate) {
+        const qtyNum = parseFloat(qty);
+        const rateNum = parseFloat(rate);
+        if (isNaN(qtyNum) || isNaN(rateNum)) return 0;
+        return unit === "g" ? (qtyNum / 1000) * rateNum : qtyNum * rateNum;
+      }
+
+      function formatCurrency(amount) {
+        return `₹${Number(amount || 0).toLocaleString("en-IN", {
+          maximumFractionDigits: 2,
+          minimumFractionDigits: 0,
+        })}`;
+      }
+
+      function escapeHtml(value) {
+        return String(value)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function getFormattedInvoiceDate(dateValue) {
+        const date = dateValue ? new Date(dateValue) : new Date();
+        if (isNaN(date.getTime())) return "Invalid date";
+        return date.toLocaleDateString("en-IN", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        });
+      }
+
+      function generateInvoiceNumber() {
+        const today = new Date();
+        return `KPS-`;
+      }
+
+      function updateTotals(subtotal = null) {
+        let finalSubtotal = subtotal;
+        if (finalSubtotal === null) {
+          finalSubtotal = items.reduce(
+            (sum, item) =>
+              sum + calculateAmount(item.qty, item.unit, item.rate),
+            0,
+          );
+        }
+        document.getElementById("subtotal").textContent =
+          formatCurrency(finalSubtotal);
+        document.getElementById("total").textContent =
+          formatCurrency(finalSubtotal);
+      }
+
+      function renderTable() {
+        const tbody = document.getElementById("items-body");
+        const emptyState = document.getElementById("empty-state");
+        tbody.innerHTML = "";
+
+        if (!items.length) {
+          emptyState.classList.remove("hidden");
+          updateTotals(0);
+          return;
+        }
+
+        emptyState.classList.add("hidden");
+
+        let subtotal = 0;
+
+        items.forEach((item) => {
+          const amount = calculateAmount(item.qty, item.unit, item.rate);
+          subtotal += amount;
+          const qtyDisplay =
+            item.unit === "g" ? `${item.qty} g` : `${item.qty} kg`;
+
+          tbody.innerHTML += `
+          <tr class="hover:bg-orange-50/70 transition-colors">
+            <td class="px-4 sm:px-5 py-4 font-semibold text-slate-800">${escapeHtml(item.name)}</td>
+            <td class="px-4 sm:px-5 py-4 text-center font-mono text-slate-700 whitespace-nowrap">${escapeHtml(qtyDisplay)}</td>
+            <td class="px-4 sm:px-5 py-4 text-right font-mono text-slate-700 whitespace-nowrap">${formatCurrency(item.rate)}</td>
+            <td class="px-4 sm:px-5 py-4 text-right font-mono font-bold text-slate-900 whitespace-nowrap">${formatCurrency(amount)}</td>
+            <td class="actions-column no-print px-4 sm:px-5 py-4 text-center">
+              <button onclick="deleteItem(${item.id})" class="rounded-full p-1.5 text-xl text-red-500 transition hover:bg-red-50 hover:text-red-700">🗑️</button>
+            </td>
+          </tr>
+        `;
+        });
+
+        updateTotals(subtotal);
+      }
+
+      function addCustomItem() {
+        const name = document.getElementById("item-name").value.trim();
+        const qty = parseFloat(document.getElementById("item-qty").value);
+        const unit = document.getElementById("item-unit").value;
+        const rate = parseFloat(document.getElementById("item-rate").value);
+
+        if (!name || isNaN(qty) || qty <= 0 || isNaN(rate) || rate <= 0) {
+          alert("Please enter valid item name, quantity, and rate.");
+          return;
+        }
+
+        items.push({
+          id: Date.now(),
+          name,
+          qty,
+          unit,
+          rate,
+        });
+
+        document.getElementById("item-name").value = "";
+        document.getElementById("item-qty").value = "1";
+        document.getElementById("item-rate").value = "180";
+
+        renderTable();
+      }
+
+      function openCatalogModal(name, rate, unit) {
+        currentCatalogItem = { name, rate, unit };
+        document.getElementById("modal-item-name").textContent = name;
+        document.getElementById("modal-item-info").innerHTML =
+          `${formatCurrency(rate)} <span class="text-base">per ${unit.toUpperCase()}</span>`;
+        document.getElementById("modal-unit-display").textContent =
+          unit.toUpperCase();
+        document.getElementById("modal-qty").value = 1;
+        document.getElementById("qty-modal").classList.remove("hidden");
+        document.getElementById("modal-qty").focus();
+        document.body.style.overflow = "hidden";
+      }
+
+      function confirmAddFromCatalog() {
+        if (!currentCatalogItem) return;
+        const qty = parseFloat(document.getElementById("modal-qty").value);
+
+        if (isNaN(qty) || qty <= 0) {
+          alert("Enter a valid quantity.");
+          return;
+        }
+
+        items.push({
+          id: Date.now(),
+          name: currentCatalogItem.name,
+          qty,
+          unit: currentCatalogItem.unit,
+          rate: currentCatalogItem.rate,
+        });
+
+        renderTable();
+        closeModal();
+      }
+
+      function closeModal() {
+        document.getElementById("qty-modal").classList.add("hidden");
+        currentCatalogItem = null;
+        document.body.style.overflow = "";
+      }
+
+      function deleteItem(id) {
+        items = items.filter((item) => item.id !== id);
+        renderTable();
+      }
+
+      function syncPreview() {
+        const invoiceValue = document
+          .getElementById("invoice-num-input")
+          .value.trim();
+        const dateValue = document.getElementById("date-input").value;
+        const customerName = document
+          .getElementById("customer-name-input")
+          .value.trim();
+        const customerAddress = document
+          .getElementById("customer-address-input")
+          .value.trim();
+
+        document.getElementById("invoice-number").textContent =
+          invoiceValue || "KPS-XXXXXX-001";
+        document.getElementById("invoice-date").textContent =
+          getFormattedInvoiceDate(dateValue);
+        document.getElementById("delivery-to").textContent =
+          customerName || "Customer Name";
+        document.getElementById("delivery-address").textContent =
+          customerAddress || "Customer Address";
+      }
+
+      function newBill() {
+        if (!confirm("Start a completely fresh bill?")) return;
+
+        items = [];
+        document.getElementById("customer-name-input").value = "";
+        document.getElementById("customer-address-input").value = "";
+        document.getElementById("item-name").value = "";
+        document.getElementById("item-qty").value = "1";
+        document.getElementById("item-unit").value = "kg";
+        document.getElementById("item-rate").value = "180";
+
+        const today = new Date();
+        document.getElementById("date-input").value = today
+          .toISOString()
+          .split("T")[0];
+        document.getElementById("invoice-num-input").value =
+          generateInvoiceNumber();
+
+        syncPreview();
+        renderTable();
+      }
+
+      function printBill() {
+        window.print();
+      }
+
+      function renderCatalog() {
+        const grid = document.getElementById("catalog-grid");
+        grid.innerHTML = "";
+
+        catalog.forEach((product) => {
+          const button = document.createElement("button");
+          button.className =
+            "catalog-card min-h-[102px] rounded-[1.5rem] border border-orange-200 bg-white px-4 py-4 text-left";
+          button.innerHTML = `
+          <div class="flex h-full flex-col">
+            <span class="text-sm font-bold leading-5 text-slate-800">${escapeHtml(product.name)}</span>
+            <span class="mt-auto pt-3 text-xs font-semibold text-emerald-600">${formatCurrency(product.rate)} / ${product.unit.toUpperCase()}</span>
+          </div>
+        `;
+          button.onclick = () =>
+            openCatalogModal(product.name, product.rate, product.unit);
+          grid.appendChild(button);
+        });
+      }
+
+      function setupListeners() {
+        [
+          "invoice-num-input",
+          "date-input",
+          "customer-name-input",
+          "customer-address-input",
+        ].forEach((id) => {
+          const element = document.getElementById(id);
+          const eventName = id === "date-input" ? "change" : "input";
+          element.addEventListener(eventName, syncPreview);
+        });
+
+        document
+          .getElementById("qty-modal")
+          .addEventListener("click", (event) => {
+            if (event.target.id === "qty-modal") closeModal();
+          });
+
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape") closeModal();
+          if (
+            event.key === "Enter" &&
+            !document.getElementById("qty-modal").classList.contains("hidden")
+          ) {
+            confirmAddFromCatalog();
+          }
+        });
+      }
+
+      window.onload = () => {
+        setupListeners();
+
+        const today = new Date();
+        document.getElementById("date-input").value = today
+          .toISOString()
+          .split("T")[0];
+        document.getElementById("invoice-num-input").value =
+          generateInvoiceNumber();
+
+        syncPreview();
+        renderCatalog();
+        renderTable();
+
+        console.log(
+          "%c✅ Kitchen’s Pure Spicy Bill Generator – upgraded for PC + mobile",
+          "color:#9f1239; font-size:13px; font-weight:700",
+        );
+      };
+    </script>
+  </body>
+</html>

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Dezway Client Access Portal - Official access to your business tools, billing, and records">
+    <title>Dezway | Client Access Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500&amp;display=swap');
+        
+        :root {
+            --tw-color-primary: #0f766e;
+        }
+        
+        * {
+            transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 150ms;
+        }
+        
+        .tail-container * {
+            font-family: 'Inter', system_ui, sans-serif;
+        }
+        
+        .heading-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .header-gradient {
+            background: linear-gradient(90deg, #0f766e 0%, #0d9488 100%);
+        }
+
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 25px 50px -12px rgb(15 118 110 / 0.15);
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo-spin {
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="tail-container bg-slate-50">
+    <!-- HEADER SECTION -->
+    <header class="bg-white border-b border-slate-200 shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-8 py-6">
+            <div class="flex items-center justify-between">
+                
+                <!-- Logo + Brand -->
+                <div class="flex items-center gap-x-4">
+                    <!-- Logo placeholder - replace logo.png with your actual file -->
+                    <img src="logo.png" 
+                         alt="Dezway Logo" 
+                         class="h-10 w-auto logo-spin">
+                    <div>
+                        <h1 class="heading-font text-3xl font-semibold tracking-[-1px] text-slate-900">Dezway</h1>
+                        <p class="text-[10px] font-medium tracking-[1px] text-teal-600 -mt-1">DIGITAL AGENCY</p>
+                    </div>
+                </div>
+
+                <!-- Portal Identifier -->
+                <div class="flex items-center gap-x-3">
+                    <div class="px-5 py-2 bg-slate-100 text-slate-700 text-sm font-semibold rounded-3xl flex items-center gap-x-2">
+                        <div class="w-2 h-2 bg-teal-500 rounded-full animate-pulse"></div>
+                        CLIENT ACCESS PORTAL
+                    </div>
+                    
+                    <!-- Optional client badge (static - easy to personalize later) -->
+                    <div class="hidden sm:flex items-center bg-white border border-slate-200 text-slate-600 text-sm font-medium px-4 py-2 rounded-3xl">
+                        <span class="mr-2">👋</span>
+                        Welcome back
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Subtle header title strip -->
+        <div class="header-gradient text-white py-4">
+            <div class="max-w-7xl mx-auto px-8 flex flex-col md:flex-row md:items-center justify-between gap-y-2">
+                <div>
+                    <h2 class="text-2xl font-semibold tracking-tight">Client Access Portal</h2>
+                    <p class="text-teal-100 text-sm">Official access point for your business tools, billing, and records</p>
+                </div>
+                
+                <!-- Trust signals -->
+                <div class="flex items-center gap-x-8 text-sm font-medium">
+                    <div class="flex items-center gap-x-1.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 8.944 11.922.42.095.858.143 1.295.143a3 3 0 01.435-.024" />
+                        </svg>
+                        <span>Secure</span>
+                    </div>
+                    <div class="flex items-center gap-x-1.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                        <span>Instant Access</span>
+                    </div>
+                    <div class="flex items-center gap-x-1.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M17 20h5v-2a3 3 0 01-5.356-1.857M17 20H7m5-2v-2c0-.656-.126-1.284-.356-1.852M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.284.356-1.852" />
+                        </svg>
+                        <span>Private</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- WELCOME / INTRO SECTION -->
+    <div class="max-w-7xl mx-auto px-8 pt-12 pb-10">
+        <div class="max-w-2xl fade-in">
+            <div class="inline-flex items-center gap-x-2 bg-teal-50 text-teal-700 text-sm font-medium px-4 py-2 rounded-3xl mb-6">
+                <span>Your official workspace</span>
+            </div>
+            
+            <h1 class="text-4xl md:text-5xl font-semibold tracking-[-1px] text-slate-900 heading-font leading-none">
+                Welcome to your<br>Dezway client workspace
+            </h1>
+            
+            <p class="mt-6 text-lg text-slate-600 leading-relaxed">
+                This portal gives you direct access to the billing and document tools 
+                provided for your business. Everything is secure, organized, and built exclusively for you.
+            </p>
+            
+            <!-- Small status line -->
+            <div class="mt-8 flex items-center gap-x-3 text-sm text-slate-500">
+                <div class="flex -space-x-2">
+                    <div class="w-6 h-6 bg-teal-100 text-teal-700 rounded-2xl flex items-center justify-center text-xs font-bold ring-2 ring-white">✓</div>
+                </div>
+                <span>Last accessed: Just now • All systems operational</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ACCESS CARDS SECTION (MAIN PART) -->
+    <!-- ====================== REUSABLE TOOL CARDS ====================== -->
+    <!-- 
+        Each card below is fully self-contained and reusable.
+        To add more tools later:
+        1. Duplicate the entire card div
+        2. Update title, description, icon SVG, and button text
+        3. Change the href if you add real pages
+        Cards are responsive and automatically stack on mobile.
+    -->
+    <div class="max-w-7xl mx-auto px-8 pb-16">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <!-- CARD 1: Bill Generator -->
+            <div class="card-hover group bg-white border border-slate-100 rounded-3xl p-8 shadow-sm flex flex-col h-full fade-in" style="animation-delay: 100ms">
+                <div class="flex items-start justify-between">
+                    <!-- Icon -->
+                    <div class="w-14 h-14 bg-teal-50 rounded-2xl flex items-center justify-center group-hover:bg-teal-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25M9 12l-2 2m0 0l-2-2M15 12l2 2m-2-2l2-2" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 9h18M3 15h18" />
+                        </svg>
+                    </div>
+                    
+                    <!-- Status indicator -->
+                    <span class="text-xs font-medium px-3 py-1 bg-emerald-100 text-emerald-700 rounded-3xl">Ready to use</span>
+                </div>
+                
+                <div class="mt-8">
+                    <h3 class="text-2xl font-semibold text-slate-900">Bill Generator</h3>
+                    <p class="mt-3 text-slate-600 text-[15.5px] leading-relaxed">
+                        Create and manage professional bills for your business in a simple and structured format.
+                    </p>
+                </div>
+                
+                <!-- Button -->
+                <a href="./bill-generator/index.html" 
+                   onclick="simulateAccess(this, 'Bill Generator opened in new tab')"
+                   class="mt-auto inline-flex items-center justify-center gap-x-3 mt-10 bg-teal-600 hover:bg-teal-700 text-white font-semibold py-4 px-8 rounded-3xl text-base group-hover:gap-x-4">
+                    Open Bill Generator
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7-7 7" />
+                    </svg>
+                </a>
+            </div>
+            
+            <!-- CARD 2: Billing & Payment Portal -->
+            <div class="card-hover group bg-white border border-slate-100 rounded-3xl p-8 shadow-sm flex flex-col h-full fade-in" style="animation-delay: 200ms">
+                <div class="flex items-start justify-between">
+                    <!-- Icon -->
+                    <div class="w-14 h-14 bg-teal-50 rounded-2xl flex items-center justify-center group-hover:bg-teal-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                        </svg>
+                    </div>
+                    
+                    <!-- Status indicator -->
+                    <span class="text-xs font-medium px-3 py-1 bg-emerald-100 text-emerald-700 rounded-3xl">Ready to use</span>
+                </div>
+                
+                <div class="mt-8">
+                    <h3 class="text-2xl font-semibold text-slate-900">Billing &amp; Payment Portal</h3>
+                    <p class="mt-3 text-slate-600 text-[15.5px] leading-relaxed">
+                        View invoices, payment status, due dates, and receipts in one organized place.
+                    </p>
+                </div>
+                
+                <!-- Button -->
+                <a href="./portal/index.html" 
+                   onclick="simulateAccess(this, 'Billing &amp; Payment Portal opened in new tab')"
+                   class="mt-auto inline-flex items-center justify-center gap-x-3 mt-10 bg-teal-600 hover:bg-teal-700 text-white font-semibold py-4 px-8 rounded-3xl text-base group-hover:gap-x-4">
+                    Open Payment Portal
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7-7 7" />
+                    </svg>
+                </a>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- OPTIONAL STATUS / NOTE SECTION -->
+    <div class="max-w-7xl mx-auto px-8 pb-16">
+        <div class="bg-white border border-slate-100 rounded-3xl p-6 flex items-center gap-x-4 text-slate-500 text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-teal-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 8.944 11.922.42.095.858.143 1.295.143a3 3 0 01.435-.024" />
+            </svg>
+            <p class="leading-relaxed">
+                All tools shared through this portal are provided officially by Dezway for your business operations. 
+                Please keep these access links private and secure.
+            </p>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 py-12">
+        <div class="max-w-7xl mx-auto px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-y-4">
+                <div class="flex items-center gap-x-4">
+                    <img src="logo.png" alt="Dezway Logo" class="h-7 w-auto opacity-75">
+                    <span class="heading-font text-xl font-medium text-white">Dezway</span>
+                </div>
+                
+                <p class="text-sm text-center md:text-right">
+                    Official client access page provided by Dezway
+                </p>
+                
+                <div class="text-xs flex items-center gap-x-6">
+                    <a href="#" class="hover:text-white">Privacy</a>
+                    <a href="#" class="hover:text-white">Support</a>
+                    <span class="text-slate-500">© 2026</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        /**
+         * Tailwind CSS CDN Configuration
+         * Premium teal color scheme for digital agency feel
+         */
+        function initializeTailwind() {
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            primary: '#0f766e',
+                        }
+                    }
+                }
+            }
+        }
+        
+        /**
+         * Simulate opening a tool (since this is a static demo page)
+         * In a real implementation you would replace the href with actual portal URLs
+         */
+        function simulateAccess(element, message) {
+            // Visual feedback on click
+            element.style.transform = 'scale(0.95)'
+            element.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                </svg>
+            `
+            
+            // Reset after 800ms and show success
+            setTimeout(() => {
+                alert(message + "\n\n(In a live portal this would open the actual tool page)")
+                
+                // Reset button
+                element.style.transform = 'scale(1)'
+                element.innerHTML = `
+                    Open ${element.textContent.includes('Bill') ? 'Bill Generator' : 'Payment Portal'}
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7-7 7" />
+                    </svg>
+                `
+            }, 800)
+            
+            // Prevent default link behavior
+            return false
+        }
+        
+        /**
+         * Initialize everything on page load
+         */
+        window.onload = function () {
+            initializeTailwind()
+            
+            console.log('%c✅ Dezway Client Access Portal ready. Premium, clean & ready for more tools.', 'color:#0f766e; font-family:Space Grotesk; font-size:13px')
+            
+            // Add subtle scroll animation to cards on mobile
+            const cards = document.querySelectorAll('.card-hover')
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1
+                    }
+                })
+            }, { threshold: 0.3 })
+            
+            cards.forEach(card => observer.observe(card))
+            
+            // Keyboard shortcut hint in console (for fun)
+            console.log('%cPro tip: Press "B" for Bill Generator or "P" for Payment Portal (demo only)', 'font-size:10px; color:#0f766e')
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dezway Client Billing & Payment Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .page-fade { animation: fadeInPage 0.5s ease-out; }
+    @keyframes fadeInPage {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .portal-card {
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .portal-card:hover { transform: translateY(-3px); }
+    .action-btn {
+      transition: all 0.2s ease;
+    }
+    .action-btn:hover { transform: translateY(-1px); }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-sky-50 via-white to-violet-50 text-slate-800">
+  <main class="page-fade max-w-5xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+    <!-- HEADER -->
+    <header class="overflow-hidden rounded-3xl border border-sky-100 bg-white shadow-[0_10px_30px_rgba(15,23,42,0.06)]">
+      <div class="h-2 bg-gradient-to-r from-sky-500 via-cyan-400 to-violet-500"></div>
+      <div class="px-6 py-7 sm:px-8 sm:py-8">
+        <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+          <div class="flex items-center gap-4">
+            <div class="flex h-16 w-16 items-center justify-center rounded-2xl border border-sky-100 bg-gradient-to-br from-sky-50 to-violet-50 shadow-sm overflow-hidden">
+              <img src="/dezway-rashid/logo.png" alt="Dezway Logo" class="h-full w-full object-contain" />
+            </div>
+            <div>
+              <p class="text-sm font-semibold uppercase tracking-[0.22em] text-sky-600">Dezway</p>
+              <h1 class="mt-1 text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">Client Billing &amp; Payment Portal</h1>
+              <p class="mt-2 text-sm sm:text-base text-slate-600">Official record of invoices, payments, and receipts</p>
+            </div>
+          </div>
+          <div class="rounded-2xl border border-slate-200 bg-slate-50/80 px-5 py-4 lg:min-w-[240px]">
+            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Client Name</p>
+            <p id="client-name" class="mt-2 text-lg font-bold text-slate-900"></p>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Pending Invoices -->
+    <section class="mt-8" id="pending-section">
+      <div class="mb-4">
+        <h2 class="text-xl font-bold text-slate-900">Pending Invoices</h2>
+        <p class="mt-1 text-sm text-slate-600">Invoices awaiting payment confirmation.</p>
+      </div>
+      <div id="pending-container" class="space-y-4"></div>
+    </section>
+
+    <!-- Paid Invoices -->
+    <section class="mt-10" id="paid-section">
+      <div class="mb-4">
+        <h2 class="text-xl font-bold text-slate-900">Paid Invoices</h2>
+        <p class="mt-1 text-sm text-slate-600">Invoices successfully completed and paid.</p>
+      </div>
+      <div id="paid-container" class="space-y-4"></div>
+    </section>
+
+    <!-- Receipts -->
+    <section class="mt-10" id="receipts-section">
+      <div class="mb-4">
+        <h2 class="text-xl font-bold text-slate-900">Receipts</h2>
+        <p class="mt-1 text-sm text-slate-600">Official receipt copies for completed payments.</p>
+      </div>
+      <div id="receipts-container" class="space-y-4"></div>
+    </section>
+
+    <!-- Payment Details -->
+    <section class="mt-10">
+      <div class="rounded-3xl border border-sky-100 bg-white p-5 shadow-[0_8px_24px_rgba(15,23,42,0.05)] sm:p-6">
+        <h2 class="text-xl font-bold text-slate-900">Payment Details</h2>
+        <div class="mt-4 grid gap-3 sm:grid-cols-3">
+          <div class="rounded-2xl bg-sky-50 border border-sky-100 p-4">
+            <p class="text-xs font-bold uppercase tracking-[0.18em] text-sky-600">UPI ID</p>
+            <p id="upi" class="mt-2 text-sm font-semibold text-slate-800"></p>
+          </div>
+          <div class="rounded-2xl bg-cyan-50 border border-cyan-100 p-4">
+            <p class="text-xs font-bold uppercase tracking-[0.18em] text-cyan-700">Phone Number</p>
+            <p id="phone" class="mt-2 text-sm font-semibold text-slate-800"></p>
+          </div>
+          <div class="rounded-2xl bg-violet-50 border border-violet-100 p-4">
+            <p class="text-xs font-bold uppercase tracking-[0.18em] text-violet-700">Payment Method</p>
+            <p id="method" class="mt-2 text-sm font-semibold text-slate-800"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="mt-10">
+      <div class="rounded-3xl border border-slate-200 bg-white px-6 py-5 shadow-[0_8px_24px_rgba(15,23,42,0.05)]">
+        <p class="text-sm font-bold text-slate-900">Dezway</p>
+        <p class="mt-2 text-sm text-slate-600">This page is the official billing reference provided by Dezway.</p>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    async function loadData() {
+      try {
+        const response = await fetch('data.json');
+        const data = await response.json();
+
+        // Client name
+        document.getElementById('client-name').textContent = data.clientName;
+
+        // Payment details
+        document.getElementById('upi').textContent = data.paymentDetails.upiId;
+        document.getElementById('phone').textContent = data.paymentDetails.phoneNumber;
+        document.getElementById('method').textContent = data.paymentDetails.paymentMethod;
+
+        // Render Pending Invoices
+        const pendingContainer = document.getElementById('pending-container');
+        pendingContainer.innerHTML = data.pendingInvoices.map(inv => `
+          <article class="portal-card rounded-3xl border ${inv.status === 'Pending' ? 'border-orange-100' : 'border-red-100'} bg-white p-5 shadow-[0_8px_24px_rgba(15,23,42,0.05)] sm:p-6">
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+              <div class="space-y-2">
+                <h3 class="text-base sm:text-lg font-bold text-slate-900">${inv.title}</h3>
+                <p class="text-sm text-slate-600"><span class="font-semibold text-slate-800">Date:</span> ${inv.date}</p>
+                <p class="text-sm text-slate-600"><span class="font-semibold text-slate-800">Amount:</span> ${inv.amount}</p>
+                <p class="text-sm text-slate-600"><span class="font-semibold text-slate-800">Due Date:</span> ${inv.dueDate}</p>
+              </div>
+              <div class="flex flex-col items-start gap-3 sm:items-end">
+                <span class="inline-flex items-center rounded-full border ${inv.status === 'Pending' ? 'border-orange-200 bg-orange-50 text-orange-700' : 'border-red-200 bg-red-50 text-red-700'} px-3 py-1 text-xs font-bold">
+                  ${inv.status}
+                </span>
+                <a href="${inv.invoiceUrl}" target="_blank" class="action-btn inline-flex items-center rounded-xl ${inv.status === 'Pending' ? 'bg-orange-500 hover:bg-orange-600' : 'bg-red-500 hover:bg-red-600'} px-4 py-2 text-sm font-semibold text-white shadow-sm">
+                  View Invoice
+                </a>
+              </div>
+            </div>
+          </article>
+        `).join('');
+
+        // Render Paid Invoices
+        const paidContainer = document.getElementById('paid-container');
+        paidContainer.innerHTML = data.paidInvoices.map(inv => `
+          <article class="portal-card rounded-3xl border border-emerald-100 bg-white p-5 shadow-[0_8px_24px_rgba(15,23,42,0.05)] sm:p-6">
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+              <div class="space-y-2">
+                <h3 class="text-base sm:text-lg font-bold text-slate-900">${inv.title}</h3>
+                <p class="text-sm text-slate-600"><span class="font-semibold text-slate-800">Amount:</span> ${inv.amount}</p>
+                <p class="text-sm text-slate-600"><span class="font-semibold text-slate-800">Paid Date:</span> ${inv.paidDate}</p>
+              </div>
+              <div class="flex flex-col items-start gap-3 sm:items-end">
+                <span class="inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">Paid</span>
+                <a href="${inv.invoiceUrl}" target="_blank" class="action-btn inline-flex items-center rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-600">
+                  View Invoice
+                </a>
+              </div>
+            </div>
+          </article>
+        `).join('');
+
+        // Render Receipts
+        const receiptsContainer = document.getElementById('receipts-container');
+        receiptsContainer.innerHTML = data.receipts.map(rec => `
+          <article class="portal-card rounded-3xl border border-violet-100 bg-white p-5 shadow-[0_8px_24px_rgba(15,23,42,0.05)] sm:p-6">
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+              <div class="space-y-2">
+                <h3 class="text-base sm:text-lg font-bold text-slate-900">${rec.title}</h3>
+                <p class="text-sm text-slate-600"><span class="font-semibold text-slate-800">Paid Date:</span> ${rec.paidDate}</p>
+              </div>
+              <div class="flex flex-col items-start gap-3 sm:items-end">
+                <a href="${rec.receiptUrl}" target="_blank" class="action-btn inline-flex items-center rounded-xl bg-violet-500 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-violet-600">
+                  View Receipt
+                </a>
+              </div>
+            </div>
+          </article>
+        `).join('');
+
+      } catch (err) {
+        console.error("Could not load data.json", err);
+        alert("Make sure data.json is in the same folder as index.html");
+      }
+    }
+
+    // Load data when page opens
+    window.onload = loadData;
+  </script>
+</body>
+</html>
