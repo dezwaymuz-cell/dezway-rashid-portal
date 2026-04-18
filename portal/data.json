@@ -1,5 +1,5 @@
 {
-  "clientName": "Kitchens",
+  "clientName": "Rashid Rabbani",
   "pendingInvoices": [
     {
       "title": "CUSTOM BILLING SYSTEM DEVELOPMENT",
@@ -11,9 +11,9 @@
     },  
     {
       "title": "PRODUCT STICKER DESIGN & DELIVERY",
-      "date": "22 April  2026",
+      "date": "27 Mar 2026",
       "amount": "₹1,250",
-      "dueDate": "27 Mar 2026",
+      "dueDate": "22 April 2026",
       "status": "Pending",
       "invoiceUrl": "pdf/invoices/DEZ-RR-003.pdf"
     }
