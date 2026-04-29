@@ -6,17 +6,10 @@
       "date": "31 Mar 2026",
       "amount": "₹4,500",
       "dueDate": "22 Apr 2026",
-      "status": "Pending",
+      "status": "Date Finished Please Proceed Fast",
       "invoiceUrl": "pdf/invoices/DEZ-RR-002.pdf"
-    },  
-    {
-      "title": "PRODUCT STICKER DESIGN & DELIVERY",
-      "date": "27 Mar 2026",
-      "amount": "₹1,250",
-      "dueDate": "22 April 2026",
-      "status": "Pending",
-      "invoiceUrl": "pdf/invoices/DEZ-RR-003.pdf"
-    }
+    } 
+    
   ],
   "paidInvoices": [
     {
@@ -24,6 +17,12 @@
       "amount": "₹1,300",
       "paidDate": "25 Mar 2026",
       "invoiceUrl": "pdf/invoices/DEZ-RR-001.pdf"
+    },
+    {
+      "title": "PRODUCT STICKER DESIGN & DELIVERY",
+      "amount": "₹1,250",
+       "paidDate": "28 Apr 2026",
+      "invoiceUrl": "pdf/invoices/DEZ-RR-003.pdf"
     }
   ],
   "receipts": [
@@ -31,6 +30,11 @@
       "title": "Receipt - Brand Starter Design - Logo & Menu Poster",
       "paidDate": "25 Mar 2026",
       "receiptUrl": "pdf/receipts/DEZ-RR-RC-001.pdf"
+    },
+    {
+      "title": "Receipt - PRODUCT STICKER DESIGN & DELIVERY",
+      "paidDate": "28 Apr 2026",
+      "receiptUrl": "pdf/receipts/DEZ-RR-RC-002.pdf"
     }
   ],
   "paymentDetails": {
