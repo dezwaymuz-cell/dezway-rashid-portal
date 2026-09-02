@@ -5,9 +5,16 @@
   "title": "Product Sticker Design & Delivery (Puttu Podi)",
   "date": "13 Jun 2026",
   "amount": "₹250",
-  "dueDate": "30 Jun 2026",
-  "status": "Pending",
+  "dueDate": "20 Aug 2026",
+  "status": "Urgent",
   "invoiceUrl": "pdf/invoices/DEZ-RR-005.pdf"
+},{
+  "title": "Kitchen Kut Brand Guidelines – Advance Payment",
+  "date": "02 Sep 2026",
+  "amount": "₹2,500",
+  "dueDate": "02 Sep 2026",
+  "status": "Due Today",
+  "invoiceUrl": "pdf/invoices/DEZ-RR-006.pdf"
 }
   ],
   "paidInvoices": [
