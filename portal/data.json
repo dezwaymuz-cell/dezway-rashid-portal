@@ -2,20 +2,13 @@
   "clientName": "Rashid Rabbani",
   "pendingInvoices": [
     {
-  "title": "Product Sticker Design & Delivery (Puttu Podi)",
-  "date": "13 Jun 2026",
-  "amount": "₹250",
-  "dueDate": "20 Aug 2026",
-  "status": "Urgent",
-  "invoiceUrl": "pdf/invoices/DEZ-RR-005.pdf"
-},{
-  "title": "Kitchen Kut Brand Guidelines – Advance Payment",
-  "date": "02 Sep 2026",
-  "amount": "₹2,500",
-  "dueDate": "02 Sep 2026",
-  "status": "Due Today",
-  "invoiceUrl": "pdf/invoices/DEZ-RR-006.pdf"
-}
+      "title": "Product Sticker Design & Delivery (Puttu Podi)",
+      "date": "13 Jun 2026",
+      "amount": "₹250",
+      "dueDate": "20 Aug 2026",
+      "status": "Urgent",
+      "invoiceUrl": "pdf/invoices/DEZ-RR-005.pdf"
+    }
   ],
   "paidInvoices": [
     {
@@ -41,6 +34,12 @@
       "amount": "₹299",
       "paidDate": "05 Jun 2026",
       "invoiceUrl": "pdf/invoices/DEZ-RR-004.pdf"
+    },
+    {
+      "title": "Kitchen Kut Brand Guidelines – Advance Payment",
+      "amount": "₹2,500",
+      "paidDate": "02 Sep 2026",
+      "invoiceUrl": "pdf/invoices/DEZ-RR-006.pdf"
     }
   ],
   "receipts": [
@@ -63,6 +62,11 @@
       "title": "Receipt - INVOICE SYSTEM PRINT LAYOUT ENHANCEMENT",
       "paidDate": "05 Jun 2026",
       "receiptUrl": "pdf/receipts/DEZ-RR-RC-004.pdf"
+    },
+    {
+      "title": "Kitchen Kut Brand Guidelines – Advance Payment",
+      "paidDate": "02 Sep 2026",
+      "receiptUrl": "pdf/receipts/DEZ-RR-RC-005.pdf"
     }
   ],
   "paymentDetails": {
