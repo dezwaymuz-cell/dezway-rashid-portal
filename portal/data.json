@@ -2,13 +2,21 @@
   "clientName": "Rashid Rabbani",
   "pendingInvoices": [
     {
-      "title": "Product Sticker Design & Delivery (Puttu Podi",
+      "title": "Product Sticker Design & Delivery (Puttu Podi)",
       "date": "13 Jun 2026",
       "amount": "₹250",
       "dueDate": "20 Aug 2026",
       "status": "Urgent",
       "invoiceUrl": "pdf/invoices/DEZ-RR-005.pdf"
-    }
+    },
+    {
+  "title": "Initial UI Design & Concept",
+  "date": "15 Sep 2026",
+  "amount": "₹1,000",
+  "dueDate": "15 Sep 2026",
+  "status": "Pending",
+  "invoiceUrl": "pdf/invoices/DEZ-RR-007.pdf"
+}
   ],
   "paidInvoices": [
     {
